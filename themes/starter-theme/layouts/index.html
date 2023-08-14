@@ -1,4 +1,9 @@
 {{ define "main" }}
   <h1>Home page</h1>
-  <a href="/posts">Posts</a>
+  
+  <div>
+    {{ $asset := resources.Get "/images/dog.jpg" }}
+    {{ $img := $asset.Resize "800x" }}
+    <img alt="Dog" src="{{ $img.RelPermalink }}" />
+  </div>
 {{ end }}

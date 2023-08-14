@@ -8,3 +8,5 @@ tags: ["tag2"] # Add some tags
 ---
 
 Dogs are awesome
+
+![Dog](/images/dog.jpg 'Dog')
