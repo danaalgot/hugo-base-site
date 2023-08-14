@@ -1,0 +1,20 @@
+.site-header,
+.site-footer{
+  background: lavender;
+  padding: 0.5rem 1rem; 
+}
+
+.site-footer{
+  margin-top: 4rem;
+}
+
+.site-header{
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .link{
+  padding: 0.5rem;
+}

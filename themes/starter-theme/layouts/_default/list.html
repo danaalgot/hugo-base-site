@@ -1,0 +1,7 @@
+{{ define "main" }}
+  <h1>Listing page</h1>
+
+  {{ range .Pages }}
+    <a href="{{ .Permalink }}">{{ .Title }}</a><br>
+  {{ end }}
+{{ end }}

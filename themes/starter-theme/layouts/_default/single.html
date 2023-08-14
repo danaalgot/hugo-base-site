@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  <p>Date: {{ .Date }}</p>
+  <p>Description: {{ .Description }}</p>
+  <p>Author: {{ .Params.author }}</p>
+  <div>
+    {{ if .Params.tags }}
+      <strong>Tags:</strong> 
+      {{ range .Params.tags }} 
+        <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a> 
+      {{ end }}
+    {{ end }}
+  </div>
+  <hr>
+  {{ .Content }}
+{{ end }}

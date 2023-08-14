@@ -1,0 +1,8 @@
+<header class="site-header">
+	<p>This is the header</p>
+	<nav id="site-navigation">
+		{{ range .Site.Menus.main }}
+			<a class="link" href="{{ .URL }}">{{ print .Name | safeHTML }}</a>
+		{{ end }}
+	</nav>
+</header>
