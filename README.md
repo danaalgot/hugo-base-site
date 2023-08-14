@@ -7,18 +7,18 @@ Install Hugo and create the site:
 - hugo version (to make sure it’s installed)
 - hugo new site site-name
 
-Start up the server:
+**Start up the server:**
 - hugo server (View published content only)
 - hugo server -D (View draft and published content)
 
 Then you can grab the starter-theme from the themes folder and place it within your newly created site.
 
 ## Content
-Two types of content - Single pages and list pages
+**Two types of content - Single pages and list pages**
 - List page: Page that lists other content.
 - Single page: Page that displays information
 
-Create a content file: (markdown)
+**Create a content file: (markdown)**
 - hugo new name.md
 - hugo new directory/filename.md
 
