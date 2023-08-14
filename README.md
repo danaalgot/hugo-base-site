@@ -2,7 +2,7 @@
 
 I'm creating a base theme in hugo so I can do development! Learning as I go. 
 ## Setup
-Install Hugo and create the site:
+**Install Hugo and create the site:**
 - brew install hugo
 - hugo version (to make sure it’s installed)
 - hugo new site site-name
