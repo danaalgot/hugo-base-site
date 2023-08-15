@@ -8,3 +8,5 @@ tags: ["tag2"] # Add some tags
 ---
 
 We love horses.
+
+{{<img src="/images/horses.jpg" alt="Horses">}}

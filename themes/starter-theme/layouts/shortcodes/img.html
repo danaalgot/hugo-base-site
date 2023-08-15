@@ -1,0 +1,5 @@
+{{ $alt := .Get "alt" }}
+{{ $image := resources.GetMatch (.Get "src") }}
+{{ $url := ($image.Resize "600x400").RelPermalink | safeURL }}
+
+<img src="{{ $url }}" alt="{{ $alt }}">

@@ -1,0 +1,25 @@
+{{/* assign the path to the $targetPath variable */}}
+{{ $targetPath := . }}
+{{/* check for "scss/" or "sass/" at the start and ".scss" or ".sass" at the of of the targetPath */}}
+{{ if and (hasPrefix $targetPath (or "scss/" "sass/")) (strings.HasSuffix $targetPath (or ".scss"  ".sass" )) }}
+    {{/* return the string, but starting at the 6th character and removing the last 5 characters */}}
+    {{ $targetPath = substr $targetPath 5 -5 }}
+    {{/* print a new target path */}}
+    {{ $targetPath = printf "css/%s.css" $targetPath}}
+{{ end }}
+
+{{/* sass options common to dev and production */}}
+{{ $commonOpts := (dict "transpiler" "libsass" "targetPath" $targetPath "includePaths" (slice "node_modules")) }}
+
+{{/* production options */}}
+{{ $opts := merge $commonOpts (dict "outputStyle" "compressed") }}
+{{/* development options */}}
+{{ if eq hugo.Environment "development" }}
+  {{ $opts = merge $commonOpts (dict "enableSourceMap" true) }}
+{{ end }}
+
+{{/* get source file and compile */}}
+{{ $css := resources.Get . | toCSS $opts }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+
