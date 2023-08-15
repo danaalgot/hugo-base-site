@@ -54,8 +54,11 @@ select {
 
 /* Breakpoints
  * ----------------------------------------------- */
-/* Site variables
+/* Site Settings
  * ----------------------------------------------- */
+html {
+  font-size: 10px; }
+
 /* General Colours
  * ----------------------------------------------- */
 /* Type Selection
@@ -72,11 +75,43 @@ select {
   font-weight: 600;
   font-style: normal; }
 
+h1, h2, h3, h4, h5, p, a {
+  font-family: "open-sans"; }
+
+h1 {
+  font-size: 4rem;
+  margin-bottom: 2rem; }
+
+h2 {
+  font-size: 3rem;
+  margin-bottom: 1.6rem; }
+
+h3 {
+  font-size: 3.3rem; }
+
+p, a {
+  font-size: 1.6rem; }
+
+main a {
+  margin-bottom: 1rem;
+  display: inline-block; }
+
+main p {
+  margin-bottom: 2rem; }
+
+/* Site Layout
+ * ----------------------------------------------- */
+main {
+  padding: 0 2rem; }
+
+img {
+  margin-top: 1rem; }
+
 /* Site Header
  * ----------------------------------------------- */
 .site-header {
   background: lavender;
-  padding: 0.5rem 1rem;
+  padding: 2rem;
   margin-bottom: 4rem;
   display: flex;
   align-items: center;
@@ -89,7 +124,7 @@ select {
  * ----------------------------------------------- */
 .site-footer {
   background: lavender;
-  padding: 0.5rem 1rem;
+  padding: 2rem;
   margin-top: 4rem; }
 
 /*# sourceMappingURL=styles.css.map */
