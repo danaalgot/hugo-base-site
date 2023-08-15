@@ -217,3 +217,226 @@ Define a block within the base template like so: {{ block "main" . }}{{ end }}. 
 ```
 
 [Read more on base templates and blocks](https://gohugo.io/templates/base/)
+
+## Variables
+Can only use variables in templates. Variables always start with a period and a capital letter. 
+
+**Common variables:**
+- {{ .Title }}
+- {{ .Permalink }}
+- {{ .Date }}
+
+### Custom variables
+We can custom variables from within the content front matter. If I added author to the front matter, I could display that like ```{{ .Params.author }}```. 
+
+You can also create variables within templates. ```{{ $myVariable := "string" }}``` Then you can print this out on the same template with ```{{ $myVariable }}```.
+
+Variables from front matter can also be used within HTML elements for styles. 
+If I create a custom variable within my content called color. 
+```
+---
+title: "Title"
+date: 2023-08-14T14:34:44-06:00
+draft: true
+color: "blue"
+---
+```
+I can then go into the template and use the variable like so.
+```
+<h1 style="color: {{ .Params.color }}">{{ .Title }}</h1>
+```
+￼
+The dot before variable represents the entire collection of variables that we have access to. 
+
+[Read more on variables here](https://gohugo.io/variables/)
+
+## Functions
+Used within the templates. Looks like {{ functionName param1 param 2 }}
+
+**Common functions**
+- {{ truncate 10 “This is a really long string” }}
+- {{ add 1 5 }}
+- {{ sub 1 5 }}
+- {{ singularize “dogs”}}
+- {{ range .Pages}}{{ end }} - Loop through a collection of pages. Each loop we can access variables about that page. Used in listing pages. 
+
+[Read more on functions](https://gohugo.io/functions/)
+
+## Conditionals
+If/else statements look a bit different in Hugo than in other languages. You put the operator before the items you are comparing.
+
+**Operators:**
+- eq (equal to)
+- lt (less than)
+- le (less than equal to)
+- gt (greater than)
+- ge (greater than equal to)
+- Isset
+- and
+- or
+
+If $var1 is equal to $var2:
+```
+{{ $var1 := "dog" }}
+{{ $var2 := "cat" }}
+
+{{ if eq $var1 $var2 }}
+  <p>True</p>
+{{ else }}
+  <p>False</p>
+{{ end }}
+```
+
+If $var1 is not equal to $var2:
+```
+{{ $var1 := "dog" }}
+{{ $var2 := "cat" }}
+
+{{ if not $var1 $var2 }}
+  <p>True</p>
+{{ else }}
+  <p>False</p>
+{{ end }}
+```
+
+If $var1 is less than $var2 AND $var1 is less than $var2:
+```
+{{ $var1 := 1 }}
+{{ $var2 := 2 }}
+{{ $var3 := 3 }}
+
+{{ if and (lt $var1 $var2) (lt $var1 $var3) }}
+  <p>True</p>
+{{ else }}
+  <p>False</p>
+{{ end }}
+```
+
+Using conditionals inline in HTML elements.
+```
+{{/*  Grab the current page title  */}}
+{{ $title := .Title }}
+
+{{ range .Pages }}
+  <a href="{{ .Permalink }}" style="{{ if eq .Title $title }} background: orange; {{ end }}">{{ .Title }}</a><br>
+{{ end }}
+```
+
+[Read more on conditionals](https://gohugo.io/templates/introduction/#conditionals)
+
+## Data Files
+The data folder within a project is a place to put any data that you will be using for the site. Mini database for your website. 
+Types of files that can be added: YAML, TOML, JSON
+
+As an example I found a [JSON file online with Canadian provinces](https://raw.githubusercontent.com/Clavicus/Testing-Requests/master/canadian-provinces.json). I added this file into the data folder in my project.
+￼
+We can grab this data with ```.Sites.Data.name```. In my case it would be ```.Sites.Data.provinces```. Then I can display values from the JSON file within my template. 
+```
+{{ range .Site.Data.provinces }}
+  <p>{{ .capital }} is the capital of {{ .name }} ({{ .short }})</p>
+{{ end }}
+```
+It displays like this on the site. 
+![Edmonton is the capital of Alberta (AB)](https://github.com/danaalgot/hugo-base-site/assets/36510178/39cf4b15-3d1d-4b75-89bb-5122140fbbb8)
+
+[Read more on data files](https://gohugo.io/templates/data-templates/)
+
+## Partial Templates
+Partial templates make your website more modular. Repeating elements that you can include into templates. Inside the layouts folder we will create a new folder called partials. All partial files are HTML files.
+￼
+To include a partial within a template file, use ``{{ partial “name” variable }}``.
+
+We can also include variables from the page content within the partials. Anything you pass into the partial will be available within the file. If you want to include all global variables within the partial, you include a dot. The dot represents the entire collection of variables that we have access to. So the header file will have access to all the variables available to us for the set content. Like title and date within the front matter. 
+
+### Passing custom values
+Here is an example passing in a custom dictionary with values.
+```
+<h1>{{ .myTitle }}</h1>
+<p>{{ .myDate }}</p>
+```
+We have set these variables within the template file.
+```
+{{ partial "header" (dict "myTitle" "My custom title" "myDate" "July 3rd 2022") }}
+```
+
+## Images
+There are couple ways that we can include images in our Hugo site. Within both of these directories (static and assets), you can create as many directories as you’d like. I’m placing all my images in a directory called images. 
+
+### Static folder:
+Hugo will allow anything in the static folder to be accessed easily inside markdown posts or in layouts, just by using a slash /. This displays the raw file. 
+```
+![Dog](/images/dog.jpg 'Dog')
+```
+
+### Assets folder:
+Assets provides us some functions in our templates to optimize images. We can resize and crop our images so they are not so large. 
+```
+{{ $asset := resources.Get "/images/horses.jpg" }}
+{{ $img := $asset.Fit "600x400" }}
+<img alt="Dog" src="{{ $img.RelPermalink }}" />
+```
+In the example above, we are taking an image from the assets folder, resizing it (which also optimizes the size of the file to be not so large), and then displays it. 
+We can also utilize these functions within shortcodes. 
+```
+{{ $alt := .Get "alt" }}
+{{ $image := resources.GetMatch (.Get "src") }}
+{{ $url := ($image.Resize "600x400").RelPermalink | safeURL }}
+
+<img src="{{ $url }}" alt="{{ $alt }}">
+```
+
+[Read more on Image processing](https://gohugo.io/content-management/image-processing/#image-processing-methods)
+
+## SCSS (Compiled styles)
+Hugo extended comes with compiler features for SCSS. Brew automatically installs the extended version of Hugo. 
+
+The tutorial I followed for this is [here](https://www.youtube.com/watch?v=wgB7kMEVOg0). 
+
+Create new folder within the assets directory called SCSS, then I organized my SCSS files as I like.
+We are going to create a new partial to hold the compiler code called libsass.html. 
+```
+{{/* assign the path to the $targetPath variable */}}
+{{ $targetPath := . }}
+{{/* check for "scss/" or "sass/" at the start and ".scss" or ".sass" at the of of the targetPath */}}
+{{ if and (hasPrefix $targetPath (or "scss/" "sass/")) (strings.HasSuffix $targetPath (or ".scss"  ".sass" )) }}
+    {{/* return the string, but starting at the 6th character and removing the last 5 characters */}}
+    {{ $targetPath = substr $targetPath 5 -5 }}
+    {{/* print a new target path */}}
+    {{ $targetPath = printf "css/%s.css" $targetPath}}
+{{ end }}
+
+{{/* sass options common to dev and production */}}
+{{ $commonOpts := (dict "transpiler" "libsass" "targetPath" $targetPath "includePaths" (slice "node_modules")) }}
+
+{{/* production options */}}
+{{ $opts := merge $commonOpts (dict "outputStyle" "compressed") }}
+{{/* development options */}}
+{{ if eq hugo.Environment "development" }}
+  {{ $opts = merge $commonOpts (dict "enableSourceMap" true) }}
+{{ end }}
+
+{{/* get source file and compile */}}
+{{ $css := resources.Get . | toCSS $opts }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}">
+```
+Then in the head.html partial we will include the libsass partial.  
+```
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {{ partial "libsass" "scss/styles.scss" }}
+  <title>
+    {{ if .IsHome }}
+      {{ print "Home | " .Site.Title }}
+    {{ else }}
+      {{ print .Title " | " .Site.Title }}
+    {{ end }}
+  </title>
+</head>
+```
+
+## Preparing for production
+Once you are ready to upload your site to the server, you can run one command that will bundle the site into a public folder.
+All you need to run is ```hugo``` in the terminal. This will bundle your site into a public folder which will show up within your project. You can then copy the contents of the site and place it on the server. 
+
