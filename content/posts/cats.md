@@ -1,10 +1,8 @@
 ---
-title: "Cats" # Add a title
-description: "Add your description" # Add a description
+title: "Title"
 date: 2023-08-14T14:34:44-06:00
-draft: true # Make it "true" if you don't want Hugo to "publish" yet
-author: "Dana" # Add your name
-tags: ["tag1"] # Add some tags
+draft: true
+color: "blue"
 ---
 
-Information about cats goes here
+Some text that I want {{<highlight color="yellow">}}hightlighted{{</highlight>}} in yellow.

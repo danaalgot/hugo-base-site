@@ -191,7 +191,7 @@ In the image above, I’ve created a single.html file that I want to override th
 ### Base templates and blocks
 Base templates are a advanced way to organize the content on your site. Base files must be named ```based.html```. This acts as the over arching template of our Hugo site. Instead of copying and pasting repeated code for the document structure in every template, we can add it here. The baseof template is the highest level template, meaning any piece of content is going to inherit it’s values. In here we are creating the document structure that will be used in every page of the site. This file lives within layouts/_default/baseof.html
 
-Define a block within the base template like so: {{ block "main" . }}{{ end }}. You can change main to whatever name you want. You can create many blocks within the base template. Another example is a footer. Then in your single or list templates include the block like so: {{ define "main" }}{{ end }}. Any code you place within this block will display inside the main section of the base template.   baseof.html
+Define a block within the base template like so: {{ block "main" . }}{{ end }}. You can change main to whatever name you want. You can create many blocks within the base template. Another example is a footer. Then in your single or list templates include the block like so: {{ define "main" }}{{ end }}. Any code you place within this block will display inside the main section of the base template. baseof.html
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -208,7 +208,7 @@ Define a block within the base template like so: {{ block "main" . }}{{ end }}. 
 </html>
 ```
 
- single.html
+single.html
 ```
 {{ define "main" }}
   <h1>{{ .Title }}</h1>

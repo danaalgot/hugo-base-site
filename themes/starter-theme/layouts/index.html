@@ -1,5 +1,9 @@
 {{ define "main" }}
   <h1>Home page</h1>
+
+  {{ range .Site.Data.provinces }}
+    <p>{{ .capital }} is the capital of {{ .name }} ({{ .short }})</p>
+  {{ end }}
   
   <div>
     {{ $asset := resources.Get "/images/dog.jpg" }}

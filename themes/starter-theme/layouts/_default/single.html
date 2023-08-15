@@ -1,5 +1,5 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+  <h1 style="color: {{ .Params.color }}">{{ .Title }}</h1>
   <p>Date: {{ .Date.Format "January 2th, 2006" }}</p>
   <p>Description: {{ .Description }}</p>
   <p>Author: {{ .Params.author }}</p>
