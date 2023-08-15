@@ -29,7 +29,7 @@ Front matter is metadata that provides information about the content file. It's 
 
 ```
 ---
-title: "A"
+title: "Title"
 date: 2023-08-10T13:56:02-06:00
 draft: true
 ---
@@ -101,4 +101,119 @@ If you want to include markdown within the shortcodes we need to update the shor
 ```
 Some text that I want {{%highlight%}}**hightlighted**{{%/highlight%}} in yellow.
 ```
-Just be aware that any HTML within the template doesn’t render anymore. It will just be markdown. 
+Just be aware that any HTML within the template doesn’t render anymore. It will just be markdown.
+
+## Taxonomy
+Taxonomy is how you logically group content together more efficiently. All taxonomies are defined in the front matter on a content page. 
+
+**Two taxonomy types in Hugo:**
+- Tags (think of a blog site, tagging posts with keywords, look at all the content tagged with a keyword)
+- Categories (group peices of content into categories)
+
+```
+---
+title: "Title"
+date: 2023-08-14T14:34:44-06:00
+draft: true
+tags: ["tag1", "tag2", "tag3"] #tags go here!
+categories: ["category1"] #categories go here!
+---
+```
+
+Hugo automatically generates a listing page for taxonomies. To list out all the content that is tagged with the same tags. 
+
+### How to create custom taxonomies:
+
+Go into your front matter and include a custom taxonomy with your name and values.
+```
+---
+title: "Title"
+date: 2023-08-14T14:34:44-06:00
+draft: true
+tags: ["tag1", "tag2", "tag3"]
+categories: ["category1"]
+moods: ["Happy", "Upbeat"] #This is a custom taxonomy
+---
+```
+Then go into your hugo.toml file and define the taxonomy you are using.
+```
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = "hugo-theme"
+[taxonomies]
+  tag = "tag"
+  category = "categories"
+  mood = "moods"
+```
+Hugo doesn’t automatically create listing pages for custom taxonomy. We need to configure Hugo to recognize our custom taxonomy within the Hugo.toml file. Add a taxonomies array with all the taxonomies you are using. You must always include the default taxonomies as well if you define any custom values. 
+
+## Templates
+The HTML of the site which we can display the content within.
+
+**Types of templates:**
+- List templates: Page that lists other content.
+- Single templates: Page that displays information
+- Home templates
+- Section templates
+- Base templates and blocks
+
+For example, all single pages share a template to display the content, and all list pages share the same list template. 
+All templates go into the layouts folder. _default folder is what templates the site will use by default. 
+
+### List page templates (list.html)
+We can create a custom list template in layouts/_default/
+
+**Functions and variables to display content:**
+- {{ .Content }} Displays the content from the markdown file of that listing page.
+- {{ range .Pages }}{{ end }} Loops through all the pages in this section
+    - {{ .Title }} Prints out the title
+    - {{ .Permalink }} Prints out the URL
+```
+{{ range .Pages }}
+  <a href="{{ .Permalink }}">{{ .Title }}</a><br>
+{{ end }}
+```
+[Read more on list templates](https://gohugo.io/templates/lists/)
+
+### Home page template
+By default the home page will display as a listing, but we can create a custom home page template within layouts called index.html. Create this page as you would for the homepage of the site. 
+
+### Section templates
+Section templates allow you to override other default templates for each directory (single and list) and customize them. When you create the file it will match the directory name you want to override. For example, if we have a folder in content called dir1, we would create a folder in the layouts directory called dir1. Within that folder you would create your list.html or single.html file you want to override. 
+
+<img width="469" alt="5 single html" src="https://github.com/danaalgot/hugo-base-site/assets/36510178/a2293dcb-a4c7-462a-ad58-fce89ac8a9dd">
+
+In the image above, I’ve created a single.html file that I want to override the default template for the dir1 directory. Now all single pieces of content will display as the new file. Instead of the default file within /layouts/_default.
+
+[Read more on section templates](https://gohugo.io/templates/section-templates/)
+
+### Base templates and blocks
+Base templates are a advanced way to organize the content on your site. Base files must be named ```based.html```. This acts as the over arching template of our Hugo site. Instead of copying and pasting repeated code for the document structure in every template, we can add it here. The baseof template is the highest level template, meaning any piece of content is going to inherit it’s values. In here we are creating the document structure that will be used in every page of the site. This file lives within layouts/_default/baseof.html
+
+Define a block within the base template like so: {{ block "main" . }}{{ end }}. You can change main to whatever name you want. You can create many blocks within the base template. Another example is a footer. Then in your single or list templates include the block like so: {{ define "main" }}{{ end }}. Any code you place within this block will display inside the main section of the base template.   baseof.html
+```
+<!DOCTYPE html>
+<html lang="en">
+{{ partial "head" . }}
+  <body>
+    {{ partial "header" . }}
+    <main>
+      {{ block "main" . }}
+
+      {{ end }}
+    </main>
+    {{ partial "footer" . }}
+  </body>
+</html>
+```
+
+ single.html
+```
+{{ define "main" }}
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+{{ end }}
+```
+
+[Read more on base templates and blocks](https://gohugo.io/templates/base/)
